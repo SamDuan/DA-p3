@@ -3,15 +3,14 @@
 ### Map Area
 Raleigh, NC, United States
 
-### 11/26/17 stop here
-- [https://www.openstreetmap.org/relation/177415](https://www.openstreetmap.org/relation/177415)
-- [http://metro.teczno.com/#charlotte](http://metro.teczno.com/#charlotte)
+- [https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/](https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/)
+- [https://www.openstreetmap.org/relation/179052](https://www.openstreetmap.org/relation/179052)
 
-This map is of my hometown, so I’m more interested to see what database querying reveals, and I’d like an opportunity to contribute to its improvement on OpenStreetMap.org.
-
+This map is of the city I used to live, so I’m quite interested to see what database querying reveals, and this could even possibly  contribute to its improvement on OpenStreetMap.org.
 
 ## Problems Encountered in the Map
-After initially downloading a small sample size of the Charlotte area and running it against a provisional data.py file, I noticed five main problems with the data, which I will discuss in the following order:
+After downloading a full size map data (482 MB), a small sample size of the Raliegh area was produced by a provisional sample.py file. It then was run against data.py file, and 
+five main problems with the data, which I will discuss in the following order:
 
 
 - Over­abbreviated street names *(“S Tryon St Ste 105”)*
