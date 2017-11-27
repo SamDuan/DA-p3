@@ -1,10 +1,9 @@
-# DA-p3
-
 # OpenStreetMap Data Case Study
 
 ### Map Area
-Charlotte, NC, United States
+Raleigh, NC, United States
 
+### 11/26/17 stop here
 - [https://www.openstreetmap.org/relation/177415](https://www.openstreetmap.org/relation/177415)
 - [http://metro.teczno.com/#charlotte](http://metro.teczno.com/#charlotte)
 
