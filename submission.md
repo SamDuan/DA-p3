@@ -6,10 +6,13 @@ Raleigh, NC, United States
 - [https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/](https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/)
 - [https://www.openstreetmap.org/relation/179052](https://www.openstreetmap.org/relation/179052)
 
+
+### A test
+
 This map is of the city I used to live, so I’m quite interested to see what database querying reveals, and this could even possibly  contribute to its improvement on OpenStreetMap.org.
 
 ## Problems Encountered in the Map
-After downloading a full size map data (482 MB), a small sample size of the Raliegh area was produced by a provisional sample.py file. It then was run against data.py file, and 
+After downloading a full size map data (482 MB), a small sample size of the Raliegh area was produced by a provisional sample.py file. It then was run against data.py file, and
 five main problems with the data, which I will discuss in the following order:
 
 
@@ -20,20 +23,20 @@ five main problems with the data, which I will discuss in the following order:
 - Street names in second ­level `“k”` tags pulled from Tiger GPS data and divided into segments, in the following format:
 
 	```XML
-	<tag k="tiger:name_base" v="Stonewall"/> 
-	<tag k="tiger:name_direction_prefix" v="W"/> 
+	<tag k="tiger:name_base" v="Stonewall"/>
+	<tag k="tiger:name_direction_prefix" v="W"/>
 	<tag k="tiger:name_type" v="St"/>
 	```
 
 ### Over­abbreviated Street Names
 Once the data was imported to SQL, some basic querying revealed street name abbreviations and postal code inconsistencies. To deal with correcting street names, I opted not use regular expressions, and instead iterated over each word in an address, correcting them to their respective mappings in audit.py using the following function:
 
-```python 
-def update(name, mapping): 
+```python
+def update(name, mapping):
 	words = name.split()
 	for w in range(len(words)):
 		if words[w] in mapping:
-			if words[w­1].lower() not in ['suite', 'ste.', 'ste']: 
+			if words[w­1].lower() not in ['suite', 'ste.', 'ste']:
 				# For example, don't update 'Suite E' to 'Suite East'
 				words[w] = mapping[words[w]] name = " ".join(words)
 	return name
@@ -51,9 +54,9 @@ Postal code strings posed a different sort of problem, forcing a decision to str
 Regardless, after standardizing inconsistent postal codes, some altogether “incorrect” (or perhaps misplaced?) postal codes surfaced when grouped together with this aggregator:
 
 ```sql
-SELECT tags.value, COUNT(*) as count 
-FROM (SELECT * FROM nodes_tags 
-	  UNION ALL 
+SELECT tags.value, COUNT(*) as count
+FROM (SELECT * FROM nodes_tags
+	  UNION ALL
       SELECT * FROM ways_tags) tags
 WHERE tags.key='postcode'
 GROUP BY tags.value
@@ -80,8 +83,8 @@ value|count
 # Sort cities by count, descending
 
 ```sql
-sqlite> SELECT tags.value, COUNT(*) as count 
-FROM (SELECT * FROM nodes_tags UNION ALL 
+sqlite> SELECT tags.value, COUNT(*) as count
+FROM (SELECT * FROM nodes_tags UNION ALL
       SELECT * FROM ways_tags) tags
 WHERE tags.key LIKE '%city'
 GROUP BY tags.value
@@ -113,7 +116,7 @@ A single zip code stood out as clearly erroneous. Somehow, a “48009” got int
 
 ```sql
 sqlite> SELECT *
-FROM nodes 
+FROM nodes
 WHERE id IN (SELECT DISTINCT(id) FROM nodes_tags WHERE key='postcode' AND value='48009')
 ```
 `1234706337|35.2134608|-80.8270161|movercash|433196|1|7784874|2011-04-06T13:16:06Z`
@@ -180,12 +183,12 @@ Lightning   16924
 grossing    15424     
 gopanthers  14988     
 KristenK    11023     
-Lambertus   8066 
+Lambertus   8066
 ```
- 
+
 ### Number of users appearing only once (having 1 post)
 ```sql
-sqlite> SELECT COUNT(*) 
+sqlite> SELECT COUNT(*)
 FROM
     (SELECT e.user, COUNT(*) as num
      FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
@@ -196,7 +199,7 @@ FROM
 
 # Additional Ideas
 
-## Contributor statistics and gamification suggestion 
+## Contributor statistics and gamification suggestion
 The contributions of users seems incredibly skewed, possibly due to automated versus manual map editing (the word “bot” appears in some usernames). Here are some user percentage statistics:
 
 - Top user contribution percentage (“jumbanho”) 52.92%
@@ -205,7 +208,7 @@ The contributions of users seems incredibly skewed, possibly due to automated ve
 94.3%
 - Combined number of users making up only 1% of posts 287 (about 85% of all users)
 
-Thinking about these user percentages, I’m reminded of “gamification” as a motivating force for contribution. In the context of the OpenStreetMap, if user data were more prominently displayed, perhaps others would take an initiative in submitting more edits to the map. And, if everyone sees that only a handful of power users are creating more than 90% a of given map, that might spur the creation of more efficient bots, especially if certain gamification elements were present, such as rewards, badges, or a leaderboard. 
+Thinking about these user percentages, I’m reminded of “gamification” as a motivating force for contribution. In the context of the OpenStreetMap, if user data were more prominently displayed, perhaps others would take an initiative in submitting more edits to the map. And, if everyone sees that only a handful of power users are creating more than 90% a of given map, that might spur the creation of more efficient bots, especially if certain gamification elements were present, such as rewards, badges, or a leaderboard.
 
 ## Additional Data Exploration
 
@@ -230,14 +233,14 @@ fast_food         51
 fire_station      48        
 fuel              31        
 bench             30        
-library           28 
+library           28
 ```
 
 ### Biggest religion (no surprise here)
 
 ```sql
 sqlite> SELECT nodes_tags.value, COUNT(*) as num
-FROM nodes_tags 
+FROM nodes_tags
     JOIN (SELECT DISTINCT(id) FROM nodes_tags WHERE value='place_of_worship') i
     ON nodes_tags.id=i.id
 WHERE nodes_tags.key='religion'
@@ -251,7 +254,7 @@ LIMIT 1;
 
 ```sql
 sqlite> SELECT nodes_tags.value, COUNT(*) as num
-FROM nodes_tags 
+FROM nodes_tags
     JOIN (SELECT DISTINCT(id) FROM nodes_tags WHERE value='restaurant') i
     ON nodes_tags.id=i.id
 WHERE nodes_tags.key='cuisine'
