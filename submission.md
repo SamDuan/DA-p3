@@ -6,9 +6,6 @@ Raleigh, NC, United States
 - [https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/](https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/)
 - [https://www.openstreetmap.org/relation/179052](https://www.openstreetmap.org/relation/179052)
 
-
-### A test
-
 This map is of the city I used to live, so I’m quite interested to see what database querying reveals, and this could even possibly  contribute to its improvement on OpenStreetMap.org.
 
 ## Problems Encountered in the Map
