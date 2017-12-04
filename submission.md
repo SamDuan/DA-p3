@@ -9,8 +9,11 @@ Raleigh, NC, United States
 This map is of the city I used to live, so I’m quite interested to see what database querying reveals, and this could even possibly  contribute to its improvement on OpenStreetMap.org.
 
 ## Problems Encountered in the Map
-After downloading a full size map data (482 MB), a small sample size of the Raliegh area was produced by a provisional sample.py file. It then was run against data.py file, and
-five main problems with the data, which I will discuss in the following order:
+After downloading a full size map data (482 MB), a small sample size of the Raliegh area was produced by a provisional sample.py file. It then was run against data.py and db.py sequentially, and few problems with the data are found as shown below:
+
+- 'LaurelcherryStreet': set(['LaurelcherryStreet']), (problem 1)
+- Inconsistent postal codes
+- <tag k="name" v="North/South Greenway" /> => this would not be audited by audit.py (problem 2?)
 
 
 - Over­abbreviated street names *(“S Tryon St Ste 105”)*
