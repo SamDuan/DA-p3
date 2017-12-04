@@ -13,7 +13,8 @@ After downloading a full size map data (482 MB), a small sample size of the Rali
 
 - 'LaurelcherryStreet': set(['LaurelcherryStreet']), (problem 1)
 - Inconsistent postal codes
-- <tag k="name" v="North/South Greenway" /> => this would not be audited by audit.py (problem 2?)
+- Typos Morisville vs Morrisville
+
 
 
 - Over­abbreviated street names *(“S Tryon St Ste 105”)*
