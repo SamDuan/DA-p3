@@ -86,7 +86,10 @@ sqlite> SELECT COUNT(*) FROM ways;
 sqlite> SELECT COUNT(DISTINCT(e.uid))          
 FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e;
 ```
+
+```sql
 1019
+```
 
 ### Top 10 contributing users
 ```sql
