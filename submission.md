@@ -9,11 +9,12 @@ Raleigh, NC, United States
 This map is of the city I used to live, so I’m quite interested to see what database querying reveals, and this could even possibly  contribute to its improvement on OpenStreetMap.org.
 
 ## Problems Encountered in the Map (to-do)
-After downloading a full size map data (482 MB), a small sample size of the Raliegh area was produced by a provisional sample.py file. It then was run against data.py and db.py sequentially, and few problems with the data are found as shown below:
+The full size map was run against audit.py, data.py and db.py sequentially, and few problems with the data are found as shown below:
 
-- 'LaurelcherryStreet': set(['LaurelcherryStreet']), (problem 1)
-- Inconsistent postal codes
-- Typos Morisville vs Morrisville
+- Missing spaces upon entering *("LaurelcherryStreet")* 
+- Extra information included the street names *("Westgate Park Dr #100", "Barrett Dr Suite 206", "Fayetteville St #1100")*
+- Inconsistent postal codes *("277030", "27713-2229", "28616")*
+- Typos in the city names *(Morrisville is mis-spelled as Morisville)*
 
 
 
@@ -28,31 +29,9 @@ After downloading a full size map data (482 MB), a small sample size of the Rali
 	<tag k="tiger:name_direction_prefix" v="W"/>
 	<tag k="tiger:name_type" v="St"/>
 	```
+# Sort Postal Codes by count, descending
+Below 
 
-### Over­abbreviated Street Names
-Once the data was imported to SQL, some basic querying revealed street name abbreviations and postal code inconsistencies. To deal with correcting street names, I opted not use regular expressions, and instead iterated over each word in an address, correcting them to their respective mappings in audit.py using the following function:
-
-```python
-def update(name, mapping):
-	words = name.split()
-	for w in range(len(words)):
-		if words[w] in mapping:
-			if words[w­1].lower() not in ['suite', 'ste.', 'ste']:
-				# For example, don't update 'Suite E' to 'Suite East'
-				words[w] = mapping[words[w]] name = " ".join(words)
-	return name
-```
-
-This updated all substrings in problematic address strings, such that:
-*“S Tryon St Ste 105”*
-becomes:
-*“South Tryon Street Suite 105”*
-
-### Postal Codes
-Postal code strings posed a different sort of problem, forcing a decision to strip all leading and trailing characters before and after the main 5­digit zip code. This effectively dropped all leading state characters (as in “NC28226”) and 4­digit zip code extensions following a hyphen (“28226­0783”). This 5­digit restriction allows for more consistent queries.
-
-
-Regardless, after standardizing inconsistent postal codes, some altogether “incorrect” (or perhaps misplaced?) postal codes surfaced when grouped together with this aggregator:
 
 ```sql
 SELECT tags.value, COUNT(*) as count
@@ -61,23 +40,23 @@ FROM (SELECT * FROM nodes_tags
       SELECT * FROM ways_tags) tags
 WHERE tags.key='postcode'
 GROUP BY tags.value
-ORDER BY count DESC;
+ORDER BY count desc
+LIMIT 10;
 ```
-
 Here are the top ten results, beginning with the highest count:
 
 ```sql
 value|count
-28205|900
-28208|388
-28206|268
-28202|204
-28204|196
-28216|174
-28211|148
-28203|120
-28209|104
-28207|86
+27560|1685
+27519|955
+27701|859
+27609|740
+27705|569
+27604|508
+27510|475
+27615|457
+27513|339
+27514|231
 ```
 
  These results were taken before accounting for Tiger GPS zip codes residing in second­ level “k” tags. Considering the relatively few documents that included postal codes, of those, it appears that out of the top ten, seven aren’t even in Charlotte, as marked by a “#”. That struck me as surprisingly high to be a blatant error, and found that the number one postal code and all others starting with“297”lie in Rock Hill, SC. So, I performed another aggregation to verify a certain suspicion...
