@@ -8,7 +8,7 @@ Raleigh, NC, United States
 
 This map is of the city I used to live, so I’m quite interested to see what database querying reveals, and this could even possibly  contribute to its improvement on OpenStreetMap.org.
 
-## Problems Encountered in the Map
+## Problems Encountered in the Map (to-do)
 After downloading a full size map data (482 MB), a small sample size of the Raliegh area was produced by a provisional sample.py file. It then was run against data.py and db.py sequentially, and few problems with the data are found as shown below:
 
 - 'LaurelcherryStreet': set(['LaurelcherryStreet']), (problem 1)
@@ -132,40 +132,40 @@ WHERE id IN (SELECT DISTINCT(id) FROM nodes_tags WHERE key='postcode' AND value=
 
  It turns out, *“280 North Old Woodward Avenue, 48009”* is in Birmingham, Michigan. All data in this document, including those not shown here, are internally consistent and verifiable, except for the latitude and longitude. These coordinates are indeed in Charlotte, NC. I’m not sure about the source of the error, but we can guess it was most likely sitting in front of a computer before this data entered the map. The document can be removed from the database easily enough.
 
-# Data Overview and Additional Ideas
+# Data Overview and Additional Ideas (to-do)
 This section contains basic statistics about the dataset, the MongoDB queries used to gather them, and some additional ideas about the data in context.
 
 ### File sizes
 ```
-charlotte.osm ......... 294 MB
-charlotte.db .......... 129 MB
-nodes.csv ............. 144 MB
-nodes_tags.csv ........ 0.64 MB
-ways.csv .............. 4.7 MB
-ways_tags.csv ......... 20 MB
-ways_nodes.cv ......... 35 MB  
+raleigh_north-carolina.osm .... 482 MB
+mydb.db ....................... 266 MB
+nodes.csv ..................... 190 MB
+nodes_tags.csv ................ 2.1 MB
+ways.csv ...................... 13 MB
+ways_nodes.cv ................. 63 MB
+ways_tags.csv ................. 30 MB
 ```  
 
-### Number of nodes
+### Number of nodes (to-do)
 ```
 sqlite> SELECT COUNT(*) FROM nodes;
 ```
 1471350
 
-### Number of ways
+### Number of ways (to-do)
 ```
 sqlite> SELECT COUNT(*) FROM ways;
 ```
 84502
 
-### Number of unique users
+### Number of unique users (to-do)
 ```sql
 sqlite> SELECT COUNT(DISTINCT(e.uid))          
 FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e;
 ```
 337
 
-### Top 10 contributing users
+### Top 10 contributing users (to-do)
 ```sql
 sqlite> SELECT e.user, COUNT(*) as num
 FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
@@ -187,7 +187,7 @@ KristenK    11023
 Lambertus   8066
 ```
 
-### Number of users appearing only once (having 1 post)
+### Number of users appearing only once (having 1 post) (to-do)
 ```sql
 sqlite> SELECT COUNT(*)
 FROM
@@ -198,9 +198,9 @@ FROM
 ```
 56
 
-# Additional Ideas
+# Additional Ideas (to-do)
 
-## Contributor statistics and gamification suggestion
+## Contributor statistics and gamification suggestion (to-do)
 The contributions of users seems incredibly skewed, possibly due to automated versus manual map editing (the word “bot” appears in some usernames). Here are some user percentage statistics:
 
 - Top user contribution percentage (“jumbanho”) 52.92%
@@ -276,5 +276,5 @@ sandwich    2
 barbecue    1
 ```
 
-# Conclusion
+# Conclusion (to-do)
  After this review of the data it’s obvious that the Charlotte area is incomplete, though I believe it has been well cleaned for the purposes of this exercise. It interests me to notice a fair amount of GPS data makes it into OpenStreetMap.org on account of users’ efforts, whether by scripting a map editing bot or otherwise. With a rough GPS data processor in place and working together with a more robust data processor similar to data.pyI think it would be possible to input a great amount of cleaned data to OpenStreetMap.org.
