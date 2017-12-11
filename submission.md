@@ -6,9 +6,9 @@ Raleigh, NC, United States
 - [https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/](https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/)
 - [https://www.openstreetmap.org/relation/179052](https://www.openstreetmap.org/relation/179052)
 
-This map is of the city I used to live, so I’m quite interested to see what database querying reveals, and this could even possibly  contribute to its improvement on OpenStreetMap.org.
+This map is of the city I used to live, so I’m quite interested to see what database querying reveals.
 
-## Problems Encountered in the Map (to-do)
+## Problems Encountered in the Map
 The full size map was run against audit.py, data.py and db.py sequentially, and few problems with the data are found as shown below:
 
 - Missing spaces upon entering *("LaurelcherryStreet")* 
@@ -16,103 +16,47 @@ The full size map was run against audit.py, data.py and db.py sequentially, and 
 - Inconsistent postal codes *("277030", "27713-2229", "28616")*
 - Typos in the city names *(Morrisville is mis-spelled as Morisville)*
 
-
-
-- Over­abbreviated street names *(“S Tryon St Ste 105”)*
-- Inconsistent postal codes *(“NC28226”, “28226­0783”, “28226”)*
-- “Incorrect” postal codes (Charlotte area zip codes all begin with “282” however a large portion of all documented zip codes were outside this region.)
-- Second­ level `“k”` tags with the value `"type"`(which overwrites the element’s previously processed `node[“type”]field`).
-- Street names in second ­level `“k”` tags pulled from Tiger GPS data and divided into segments, in the following format:
-
-	```XML
-	<tag k="tiger:name_base" v="Stonewall"/>
-	<tag k="tiger:name_direction_prefix" v="W"/>
-	<tag k="tiger:name_type" v="St"/>
-	```
-# Sort Postal Codes by count, descending
-Below 
-
-
-```sql
-SELECT tags.value, COUNT(*) as count
-FROM (SELECT * FROM nodes_tags
-	  UNION ALL
-      SELECT * FROM ways_tags) tags
-WHERE tags.key='postcode'
-GROUP BY tags.value
-ORDER BY count desc
-LIMIT 10;
-```
-Here are the top ten results, beginning with the highest count:
-
-```sql
-value|count
-27560|1685
-27519|955
-27701|859
-27609|740
-27705|569
-27604|508
-27510|475
-27615|457
-27513|339
-27514|231
-```
-
- These results were taken before accounting for Tiger GPS zip codes residing in second­ level “k” tags. Considering the relatively few documents that included postal codes, of those, it appears that out of the top ten, seven aren’t even in Charlotte, as marked by a “#”. That struck me as surprisingly high to be a blatant error, and found that the number one postal code and all others starting with“297”lie in Rock Hill, SC. So, I performed another aggregation to verify a certain suspicion...
 # Sort cities by count, descending
 
 ```sql
 sqlite> SELECT tags.value, COUNT(*) as count
 FROM (SELECT * FROM nodes_tags UNION ALL
       SELECT * FROM ways_tags) tags
-WHERE tags.key LIKE '%city'
+WHERE tags.key == 'city'
 GROUP BY tags.value
 ORDER BY count DESC;
 ```
 
-And, the results, edited for readability:
+And the results are shown below:
 
 ```sql
-Rock Hill   111       
-Pineville   27        
-Charlotte   26        
-York        24        
-Matthews    10        
-Concord     4         
-3000        3         
-10          2         
-Lake Wylie  2         
-1           1         
-3           1         
-43          1         
-61          1         
-Belmont, N  1         
-Fort Mill,  1         
+Raleigh      6830
+Cary         3119
+Morrisville  1732
+Durham       1674
+Chapel Hill  625
+Carrboro     503
+Research Triangle Park 6
+Hillsborough 5
+RTP          4
+raleigh      4
+chapel Hill  3
+Chapel Hill, NC 2
+Wake Forest  2
+cary         2
+durham       2
+ Raleigh     1
+Apex         1
+Morisville   1
+Ralegh       1
+Ralegih      1
+chapel hill  1
 ```
 
-These results confirmed my suspicion that this metro extract would perhaps be more aptly named “Metrolina” or the “Charlotte Metropolitan Area” for its inclusion of surrounding cities in the sprawl. More importantly, three documents need to have their trailing state abbreviations stripped. So, these postal codes aren’t “incorrect,” but simply unexpected. However, one final case proved otherwise.
-A single zip code stood out as clearly erroneous. Somehow, a “48009” got into the dataset. Let’s display part of its document for closer inspection (for our purposes, only the “address” and “pos” fields are relevant):
+Firstly, the major cities in the triangle are (Raleigh-Durham-Chapel Hills) are included in this data set. Thus, it contains not only the city of Raleigh but also the nearby cities. Secondly, it is visible that there are several variations of names of the same city (e.g. "Chapel Hill", "chapel Hill", Chapel Hill, NC", "chapel hill").
 
-```sql
-sqlite> SELECT *
-FROM nodes
-WHERE id IN (SELECT DISTINCT(id) FROM nodes_tags WHERE key='postcode' AND value='48009')
-```
-`1234706337|35.2134608|-80.8270161|movercash|433196|1|7784874|2011-04-06T13:16:06Z`
-
-`sqlite> SELECT * FROM nodes_tags WHERE id=1234706337 and type='addr';`
-
-```sql
-1234706337|housenumber|280|addr
-1234706337|postcode|48009|addr
-1234706337|street|North Old Woodward Avenue|addr
-```
-
- It turns out, *“280 North Old Woodward Avenue, 48009”* is in Birmingham, Michigan. All data in this document, including those not shown here, are internally consistent and verifiable, except for the latitude and longitude. These coordinates are indeed in Charlotte, NC. I’m not sure about the source of the error, but we can guess it was most likely sitting in front of a computer before this data entered the map. The document can be removed from the database easily enough.
-
-# Data Overview and Additional Ideas (to-do)
-This section contains basic statistics about the dataset, the MongoDB queries used to gather them, and some additional ideas about the data in context.
+# Data Overview and Additional Ideas
+This section contains basic statistics about the dataset, and sql queries used to gather them are listed as well.
 
 ### File sizes
 ```
@@ -125,26 +69,26 @@ ways_nodes.cv ................. 63 MB
 ways_tags.csv ................. 30 MB
 ```  
 
-### Number of nodes (to-do)
-```
+### Number of nodes
+```sql
 sqlite> SELECT COUNT(*) FROM nodes;
 ```
-1471350
+2374920
 
-### Number of ways (to-do)
-```
+### Number of ways
+```sql
 sqlite> SELECT COUNT(*) FROM ways;
 ```
-84502
+243842
 
-### Number of unique users (to-do)
+### Number of unique users
 ```sql
 sqlite> SELECT COUNT(DISTINCT(e.uid))          
 FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e;
 ```
-337
+1019
 
-### Top 10 contributing users (to-do)
+### Top 10 contributing users
 ```sql
 sqlite> SELECT e.user, COUNT(*) as num
 FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
@@ -154,19 +98,19 @@ LIMIT 10;
 ```
 
 ```sql
-jumbanho    823324    
-woodpeck_f  481549    
-TIGERcnl    44981     
-bot-mode    32033     
-rickmastfa  18875     
-Lightning   16924     
-grossing    15424     
-gopanthers  14988     
-KristenK    11023     
-Lambertus   8066
+jumbanho        1552751
+JMDeMai         219489
+bdiscoe         129500
+woodpeck_fixbot 112193
+bigal945        103601
+yotann          66555
+runbananas      41249
+BjornRasmussen  37676
+sandhill        33495
+MikeInRaleigh   30578
 ```
 
-### Number of users appearing only once (having 1 post) (to-do)
+### Number of users appearing only once (having 1 post)
 ```sql
 sqlite> SELECT COUNT(*)
 FROM
@@ -175,7 +119,31 @@ FROM
      GROUP BY e.user
      HAVING num=1)  u;
 ```
-56
+199
+
+### Top 10 amenities
+
+```sql
+sqlite> SELECT value, COUNT(*) as num
+FROM nodes_tags
+WHERE key='amenity'
+GROUP BY value
+ORDER BY num DESC
+LIMIT 10;
+```
+
+```sql
+bicycle_parking  1146
+restaurant       924
+place_of_worship 742
+fast_food        366
+bench            264
+waste_basket     250
+cafe             194
+atm              156
+school           152
+parking          144
+```
 
 # Additional Ideas (to-do)
 
@@ -189,71 +157,6 @@ The contributions of users seems incredibly skewed, possibly due to automated ve
 - Combined number of users making up only 1% of posts 287 (about 85% of all users)
 
 Thinking about these user percentages, I’m reminded of “gamification” as a motivating force for contribution. In the context of the OpenStreetMap, if user data were more prominently displayed, perhaps others would take an initiative in submitting more edits to the map. And, if everyone sees that only a handful of power users are creating more than 90% a of given map, that might spur the creation of more efficient bots, especially if certain gamification elements were present, such as rewards, badges, or a leaderboard.
-
-## Additional Data Exploration
-
-### Top 10 appearing amenities
-
-```sql
-sqlite> SELECT value, COUNT(*) as num
-FROM nodes_tags
-WHERE key='amenity'
-GROUP BY value
-ORDER BY num DESC
-LIMIT 10;
-```
-
-```sql
-place_of_worship  580       
-school            402       
-restaurant        80        
-grave_yard        75        
-parking           63        
-fast_food         51        
-fire_station      48        
-fuel              31        
-bench             30        
-library           28
-```
-
-### Biggest religion (no surprise here)
-
-```sql
-sqlite> SELECT nodes_tags.value, COUNT(*) as num
-FROM nodes_tags
-    JOIN (SELECT DISTINCT(id) FROM nodes_tags WHERE value='place_of_worship') i
-    ON nodes_tags.id=i.id
-WHERE nodes_tags.key='religion'
-GROUP BY nodes_tags.value
-ORDER BY num DESC
-LIMIT 1;
-```
-`christian   571`
-
-### Most popular cuisines
-
-```sql
-sqlite> SELECT nodes_tags.value, COUNT(*) as num
-FROM nodes_tags
-    JOIN (SELECT DISTINCT(id) FROM nodes_tags WHERE value='restaurant') i
-    ON nodes_tags.id=i.id
-WHERE nodes_tags.key='cuisine'
-GROUP BY nodes_tags.value
-ORDER BY num DESC;
-```
-
-```sql
-american    9         
-pizza       5         
-steak_hous  4         
-chinese     3         
-japanese    3         
-mexican     3         
-thai        3         
-italian     2         
-sandwich    2         
-barbecue    1
-```
 
 # Conclusion (to-do)
  After this review of the data it’s obvious that the Charlotte area is incomplete, though I believe it has been well cleaned for the purposes of this exercise. It interests me to notice a fair amount of GPS data makes it into OpenStreetMap.org on account of users’ efforts, whether by scripting a map editing bot or otherwise. With a rough GPS data processor in place and working together with a more robust data processor similar to data.pyI think it would be possible to input a great amount of cleaned data to OpenStreetMap.org.
