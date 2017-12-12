@@ -164,16 +164,16 @@ LIMIT 10;
 ```
 
 ```sql
-clothes|198
-supermarket|186
-hairdresser|118
-vacant|88
-beauty|74
-car_repair|60
-jewelry|58
-department_store|54
-gift|48
-art|42
+clothes     198
+supermarket 186
+hairdresser 118
+vacant      88
+beauty      74
+car_repair  60
+jewelry     58
+department_store 54
+gift        48
+art         42
 ```
 
 # Additional Ideas
