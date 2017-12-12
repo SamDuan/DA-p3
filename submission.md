@@ -6,7 +6,7 @@ Raleigh, NC, United States
 - [https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/](https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/)
 - [https://www.openstreetmap.org/relation/179052](https://www.openstreetmap.org/relation/179052)
 
-This map is of the city I used to live, so I’m quite interested to see what database querying reveals.
+This map is of a city that I used to live, so I’m quite interested to see what database querying reveals.
 
 ## Problems Encountered in the Map
 The full size map was run against audit.py, data.py and db.py sequentially, and few problems with the data are found as shown below:
@@ -73,13 +73,19 @@ ways_tags.csv ................. 30 MB
 ```sql
 sqlite> SELECT COUNT(*) FROM nodes;
 ```
+
+```sql
 2374920
+```
 
 ### Number of ways
 ```sql
 sqlite> SELECT COUNT(*) FROM ways;
 ```
+
+```sql
 243842
+```
 
 ### Number of unique users
 ```sql
@@ -122,7 +128,10 @@ FROM
      GROUP BY e.user
      HAVING num=1)  u;
 ```
+
+```sql
 199
+```
 
 ### Top 10 amenities
 
@@ -148,18 +157,10 @@ school           152
 parking          144
 ```
 
-# Additional Ideas (to-do)
+# Additional Ideas
 
-## Contributor statistics and gamification suggestion (to-do)
-The contributions of users seems incredibly skewed, possibly due to automated versus manual map editing (the word “bot” appears in some usernames). Here are some user percentage statistics:
+## Contributor statistics
+Based on the result from the top 10 contriting users, it is easily to note that the user "jumbanho" has a high contribution, which is larger than 65% of all. In other words, the contribution from this user is more than the totality of all other users. It is quite likely the data entry could be skewed due to dominance of data source. How to reduce the risk of having biased data entry is a question that worth considering
 
-- Top user contribution percentage (“jumbanho”) 52.92%
-- Combined top 2 users' contribution (“jumbanho” and “woodpeck_fixbot”) 83.87%
-- Combined Top 10 users contribution
-94.3%
-- Combined number of users making up only 1% of posts 287 (about 85% of all users)
-
-Thinking about these user percentages, I’m reminded of “gamification” as a motivating force for contribution. In the context of the OpenStreetMap, if user data were more prominently displayed, perhaps others would take an initiative in submitting more edits to the map. And, if everyone sees that only a handful of power users are creating more than 90% a of given map, that might spur the creation of more efficient bots, especially if certain gamification elements were present, such as rewards, badges, or a leaderboard.
-
-# Conclusion (to-do)
+# Conclusion
  After this review of the data it’s obvious that the Charlotte area is incomplete, though I believe it has been well cleaned for the purposes of this exercise. It interests me to notice a fair amount of GPS data makes it into OpenStreetMap.org on account of users’ efforts, whether by scripting a map editing bot or otherwise. With a rough GPS data processor in place and working together with a more robust data processor similar to data.pyI think it would be possible to input a great amount of cleaned data to OpenStreetMap.org.
