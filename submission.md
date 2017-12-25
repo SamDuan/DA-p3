@@ -86,27 +86,6 @@ FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e;
 1019
 ```
 
-### Top 10 contributing users
-```sql
-sqlite> SELECT e.user, COUNT(*) as num
-FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
-GROUP BY e.user
-ORDER BY num DESC
-LIMIT 10;
-```
-```sql
-jumbanho        1552751
-JMDeMai         219489
-bdiscoe         129500
-woodpeck_fixbot 112193
-bigal945        103601
-yotann          66555
-runbananas      41249
-BjornRasmussen  37676
-sandhill        33495
-MikeInRaleigh   30578
-```
-
 ### Number of users appearing only once (having 1 post)
 ```sql
 sqlite> SELECT COUNT(*)
@@ -210,7 +189,30 @@ art         42
 # Additional Ideas
 
 ## Contributor statistics
-Based on the result from the top 10 contriting users, it is easy to note that the user "jumbanho" has a very high contribution, which is larger than 65%. In other words, the contribution from this user is more than the totality of all other users. It is possible the data entry could be skewed due to dominance of data source. How to reduce the risk of having biased data entry is a question that worth considering.
+### Top 10 contributing users
+```sql
+sqlite> SELECT e.user, COUNT(*) as num
+FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
+GROUP BY e.user
+ORDER BY num DESC
+LIMIT 10;
+```
+```sql
+jumbanho        1552751
+JMDeMai         219489
+bdiscoe         129500
+woodpeck_fixbot 112193
+bigal945        103601
+yotann          66555
+runbananas      41249
+BjornRasmussen  37676
+sandhill        33495
+MikeInRaleigh   30578
+```
+
+Based on the result above, it is easy to note that the user "jumbanho" has a very high contribution, which is larger than 65%. 
+
+In other words, the contribution from this user is more than the totality of all other users. It is possible the data entry could be skewed due to dominance of data source. How to reduce the risk of having biased data entry is a question that worth considering.
 
 # Conclusion
 This review renders a general overlook of the geography information in Raleigh area, and certain entry errors have been be identified as well. In addition, the data in this map is largely supplied by a single user, which could possibly lead to bias information.
