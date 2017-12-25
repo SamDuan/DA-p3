@@ -216,7 +216,7 @@ Based on the result above, it is easy to note that,
 - The rest of the users, 99.5% of all users, only contribute to 20% of the data corporately.
 
 It is understandable that certain users are more passionate about the OpenStreetMap project, and therefore contribute more to the data input. However, because data input is dominant by a particular group of people, it is possible the data entry could be skewed.
-To alleviate this issue, the OpenStreetMap project could potentially set an upper limit for the contribution from each user. In addition, if the map data of an area is largely provided by an user, a reminder could be posted as a headline, indicating that this set of data may be biased potentially. This could be an incentive to other users to contribute more to normalize the users contribution, and gereral warning to whoever considering to use the data.
+To alleviate this issue, the OpenStreetMap project could potentially set an upper limit for the contribution from each user. In addition, if the map data of an area is largely provided by an user, a reminder could be posted as a headline, indicating that this set of data may be biased potentially. This could be an incentive to other users to contribute more to normalize the users contribution, and a gereral warning to whoever considering to use the data. A potential drawback could be the delay of building complete data sets because of the limit for the contribution from each user.
 
 # Conclusion
 This review renders a general overlook of the geography information in Raleigh area, and certain entry errors have been be identified as well. In addition, the data in this map is largely supplied by a single user, which could possibly lead to bias information.
