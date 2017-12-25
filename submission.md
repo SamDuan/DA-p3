@@ -16,6 +16,37 @@ The full size map was run against audit.py, data.py and db.py sequentially, and 
 - Inconsistent postal codes *("277030", "27713-2229", "28616")*
 - Typos in the city names *(Morrisville is mis-spelled as Morisville)*
 
+### Inconsistent post codes
+To standardize the postal codes, the following codes are inserted into data.py to convert all the postal codes into a basic 5-digit format.
+
+Define a function to update the postal codes
+
+``` python
+def update_postcode(postcode):
+    # ref. https://discussions.udacity.com/t/cleaning-postcode/195512/6
+    search = re.match(r'^\D*(\d{5}).*', postcode)
+    clean_postcode = search.group(1)
+    return clean_postcode
+``` 
+Incorporate the update_costcode (as well as another function to update the street name, update_name) into shape_element function
+
+``` python
+def shape_element:
+    ...
+    # start cleaning:
+    # Street name
+    if child.attrib["k"] == 'addr:street':
+        tag_dict["value"] = update_name(child.attrib["v"], mapping)
+    # Postcodes
+        elif child.attrib["k"] == 'addr:postcode':
+            tag_dict["value"] = update_postcode(child.attrib["v"])
+        else: 
+            tag_dict["value"] = child.attrib["v"]
+    # end cleaning
+    ...
+``` 
+    
+
 # Data Overview and Additional Ideas
 This section contains basic statistics about the dataset, and sql queries used to gather them are listed as well.
 
