@@ -19,7 +19,7 @@ The full size map was run against audit.py, data.py and db.py sequentially, and 
 ### Inconsistent post codes
 To standardize the postal codes, the following codes are inserted into data.py to convert all the postal codes into a basic 5-digit format.
 
-Define a function to update the postal codes
+Defining a function to update the postal codes
 
 ``` python
 def update_postcode(postcode):
@@ -28,10 +28,10 @@ def update_postcode(postcode):
     clean_postcode = search.group(1)
     return clean_postcode
 ``` 
-Incorporate the update_costcode (as well as another function to update the street name, update_name) into shape_element function
+Incorporating update_costcode() (as well as another function to update the street name, update_name()) into shape_element() function
 
 ``` python
-def shape_element:
+def shape_element():
     ...
     # start cleaning:
     # Street name
