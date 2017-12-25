@@ -47,8 +47,8 @@ def shape_element():
 ``` 
     
 
-# Data Overview and Additional Ideas
-This section contains basic statistics about the dataset, and sql queries used to gather them are listed as well.
+# Data Overview and Exploration
+This section contains basic statistics and exploration of the dataset, and sql queries used to gather them are listed as well.
 
 ### File sizes
 ```
@@ -210,9 +210,13 @@ sandhill        33495
 MikeInRaleigh   30578
 ```
 
-Based on the result above, it is easy to note that the user "jumbanho" has a very high contribution, which is larger than 65%. 
+Based on the result above, it is easy to note that,
+- The top user "jumbanho" makes a significant contribution, which is larger than 65%. 
+- The top 5 users corporately contribute to 80% of the data.
+- The rest of the users, 99.5% of all users, only contribute to 20% of the data corporately.
 
-In other words, the contribution from this user is more than the totality of all other users. It is possible the data entry could be skewed due to dominance of data source. How to reduce the risk of having biased data entry is a question that worth considering.
+It is understandable that certain users are more passionate about the OpenStreetMap project, and therefore contribute more to the data input. However, because data input is dominant by a particular group of people, it is possible the data entry could be skewed.
+To alleviate this issue, the OpenStreetMap project could potentially set an upper limit for the contribution from each user. In addition, if the map data of an area is largely provided by an user, a reminder could be posted as a headline, indicating that this set of data may be biased potentially. This could be an incentive to other users to contribute more to normalize the users contribution, and gereral warning to whoever considering to use the data.
 
 # Conclusion
 This review renders a general overlook of the geography information in Raleigh area, and certain entry errors have been be identified as well. In addition, the data in this map is largely supplied by a single user, which could possibly lead to bias information.
