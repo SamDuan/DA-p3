@@ -1,12 +1,13 @@
 # OpenStreetMap Data Case Study
 
-### Map Area
-Raleigh, NC, United States
+### Map Area: Raleigh, NC, United States
+This map is of a city that I used to live, so I’m quite interested to see what database querying reveals.
 
+Source of data
 - [https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/](https://mapzen.com/data/metro-extracts/metro/raleigh_north-carolina/)
 - [https://www.openstreetmap.org/relation/179052](https://www.openstreetmap.org/relation/179052)
 
-This map is of a city that I used to live, so I’m quite interested to see what database querying reveals.
+
 
 ## Problems Encountered in the Map
 The full size map was run against audit.py, data.py and db.py sequentially, and few problems with the data are found as shown below:
