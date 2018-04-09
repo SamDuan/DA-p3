@@ -449,20 +449,12 @@ trip_data = pd.read_csv('201309_trip_summary.csv')
 
 usage_stats(trip_data)
 ```
-
     There are 27345 data points in the dataset.
     The average duration of trips is 27.60 minutes.
     The median trip duration is 10.72 minutes.
     25% of trips are shorter than 6.82 minutes.
-    25% of trips are longer than 17.28 minutes.
-    
-
-
-
-
+    25% of trips are longer than 17.28 minutes.  
     array([  6.81666667,  10.71666667,  17.28333333])
-
-
 
 You should see that there are over 27,000 trips in the first month, and that the average trip duration is larger than the median trip duration (the point where 50% of trips are shorter, and 50% are longer). In fact, the mean is larger than the 75% shortest durations. This will be interesting to look at later on.
 
